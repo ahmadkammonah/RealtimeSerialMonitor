@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Last Update on Thu Dec 22 2020
+Last Update on Thu Dec 23 2020
 
 @author: Ahmad Kammonah
 """
@@ -208,6 +208,10 @@ def ploltyUploader():
         df['Datetime'] = pd.to_datetime(df['Datetime'])
         df['date'] = df['Datetime'].dt.date
         df['time'] = df['Datetime'].dt.time
+
+        # Deletes from top of datafram to make sure Dataframe does not exceed 500KB (Plolty Free Subscription only allows 500KB uploads)
+        while ((df.memory_usage(index=True).sum() / 1000) > 500):
+            df = df.iloc[50:]
 
         # Create figure with secondary y-axis
         fig = make_subplots(specs=[[{"secondary_y": True}]])
